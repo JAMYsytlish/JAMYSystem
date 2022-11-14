@@ -1,13 +1,19 @@
 package jamy.jamysystem;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
- enum YamlEnum {
+import static jamy.jamysystem.JAMYSystem.DataFolder;
+
+enum YamlEnum {
     Shop("ShopData/"),
     Money("MoneyData/");
     private final String path;
@@ -35,16 +41,20 @@ public class YamlControl {
 
     public YamlControl(YamlEnum type, String name) {
         this.name = name;
-        this.file = new File(Bukkit.getServer().getPluginManager().getPlugin("JAMYSystem").getDataFolder(), type.getPath() + name +".yaml");
+        this.file = new File(DataFolder, type.getPath() + name +".yaml");
         if (!file.exists()) {
             try {
                 file.createNewFile();
+                Bukkit.getPlayer("JaemY_Nane").sendMessage(String.valueOf(file.createNewFile()));
             } catch (IOException e) {
                 // blabla..
+                Bukkit.getPlayer("JaemY_Nane").sendMessage("Failed.");
             }
-        } 
+        }
+        Bukkit.getPlayer("JaemY_Nane").sendMessage("out");
 
         customFile = YamlConfiguration.loadConfiguration(file);
+        this.save();
 
 
     }

@@ -2,3 +2,6 @@ name: JAMYSystem
 version: '${project.version}'
 main: jamy.jamysystem.JAMYSystem
 api-version: 1.19
+commands:
+  yamltest:
+    description: yamltest
