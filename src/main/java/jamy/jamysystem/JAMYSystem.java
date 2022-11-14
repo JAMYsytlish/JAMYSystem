@@ -1,17 +1,17 @@
 package jamy.jamysystem;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static jamy.jamysystem.JAMYInventory.setupClockMenu;
 
 public final class JAMYSystem extends JavaPlugin {
-
+    public static JAMYInventory ClockMenu = new JAMYInventory("ClockMenu", 5);
     @Override
     public void onEnable() {
         // Plugin startup
         getServer().getPluginManager().registerEvents(new JAMYInteraction(), this);
-        setupClockMenu();
+        ClockMenu.setupClockMenu();
         System.out.println(ChatColor.BLUE+"Welcome To JAMYSystem!!");
 
     }
