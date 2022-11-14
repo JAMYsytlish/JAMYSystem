@@ -8,8 +8,8 @@ import static jamy.jamysystem.YamlEnum.Money;
 public class JAMYMoney {
 
 
-    public static Integer getMoney(String target) {
-        YamlControl y1 = new YamlControl(Money, target);
+    public static Integer getMoney(Player target) {
+        YamlControl y1 = new YamlControl(Money, target.getName());
         Integer money = (Integer) y1.get().get("Money");
         if(money == null) {
             setMoney(target, 0);
@@ -18,14 +18,19 @@ public class JAMYMoney {
         return money;
     }
     
-    public static void setMoney(String target, Integer tgMoney) {
-        Player player = Bukkit.getPlayer(target);
-        YamlControl y1 = new YamlControl(Money, target);
+    public static void setMoney(Player target, Integer tgMoney) {
+        YamlControl y1 = new YamlControl(Money,target.getName());
         y1.get().set("Money", tgMoney);
         y1.save();
-
     }
 
+    public static void addMoney(Player target, Integer tgMoney) {
+        setMoney(target, getMoney(target) + tgMoney);
+    }
+
+    public static void subMoney(Player target, Integer tgMoney) {
+        setMoney(target, getMoney(target) -tgMoney);
+    }
 
 
 

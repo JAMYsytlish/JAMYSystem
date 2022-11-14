@@ -22,7 +22,7 @@ public class JAMYInteraction implements Listener {
 
             if(event.getRawSlot() == 13) {
                 Player player = (Player) event.getWhoClicked();
-                player.sendMessage(String.valueOf(getMoney(player.getName())));
+                player.sendMessage(String.valueOf(getMoney(player)));
                 return;
             }
         }

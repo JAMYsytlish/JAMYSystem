@@ -10,19 +10,17 @@ public class JAMYPlayer {
         this.player = player;
     }
 
-    public void sendMoney(String receiver, Integer amount) {
+    public void sendMoney(Player receiver, Integer amount) {
 
-        Integer MoneyGiver = JAMYMoney.getMoney(this.player.getName());
+        Integer MoneyGiver = JAMYMoney.getMoney(this.player);
         Integer MoneyReceiver = JAMYMoney.getMoney(receiver);
 
         if (MoneyGiver < amount) {
             this.player.sendMessage("Not enough money.");
             return;
         } else {
-            MoneyGiver -= amount;
-            JAMYMoney.setMoney(this.player.getName(), MoneyGiver);
-            MoneyReceiver += amount;
-            JAMYMoney.setMoney(receiver, MoneyReceiver);
+            JAMYMoney.subMoney(this.player, amount);
+            JAMYMoney.addMoney(receiver, amount);
         }
 
     }
