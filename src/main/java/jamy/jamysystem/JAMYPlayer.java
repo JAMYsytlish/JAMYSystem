@@ -17,11 +17,14 @@ public class JAMYPlayer {
 
         if (MoneyGiver < amount) {
             this.player.sendMessage("Not enough money.");
-            return;
         } else {
             JAMYMoney.subMoney(this.player, amount);
             JAMYMoney.addMoney(receiver, amount);
         }
+
+    }
+    // (JAMYPlayer).buy(shop, 3) : JAMYPlayer buys 3 index of products in 'shop'
+    public void buy(JAMYShop shop, int index) {
 
     }
 

@@ -35,28 +35,31 @@ enum YamlEnum {
 public class YamlControl {
 
     private final File file;
-    private FileConfiguration customFile;
+    private final FileConfiguration customFile;
 
     private final String name;
 
     public YamlControl(YamlEnum type, String name) {
         this.name = name;
         this.file = new File(DataFolder, type.getPath() + name +".yaml");
+//        this.file = new File(Bukkit.getPluginManager().getPlugin("JAMYSystem").getDataFolder().getPath(),type.getPath() + name +"1.yaml");
+//        this.file = new File("C:/Users/jyc/Desktop","test.yaml");
+        System.out.println("exists? : " + file.exists());
+        System.out.println(file.getPath());
+
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                Bukkit.getPlayer("JaemY_Nane").sendMessage(String.valueOf(file.createNewFile()));
+//                System.out.println(file.createNewFile());
             } catch (IOException e) {
                 // blabla..
-                Bukkit.getPlayer("JaemY_Nane").sendMessage("Failed.");
+//                System.out.println("exception");
+                e.printStackTrace();
             }
         }
-        Bukkit.getPlayer("JaemY_Nane").sendMessage("out");
+//        System.out.println("out");
 
         customFile = YamlConfiguration.loadConfiguration(file);
-        this.save();
-
-
     }
 
 
@@ -76,10 +79,8 @@ public class YamlControl {
         }
     }
  
-    public void reload(){
-        customFile = YamlConfiguration.loadConfiguration(file);
-    }
-
-
+//    public void reload(){
+//        customFile = YamlConfiguration.loadConfiguration(file);
+//    }
 
 }

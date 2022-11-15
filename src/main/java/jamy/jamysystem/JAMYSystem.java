@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.xml.crypto.Data;
 import java.io.File;
 
 import static jamy.jamysystem.JAMYInventory.ClockMenu;
@@ -17,9 +16,6 @@ public final class JAMYSystem extends JavaPlugin {
     public void onEnable() {
         // Plugin startup
         DataFolder = getDataFolder();
-        if(!DataFolder.exists()) {
-            DataFolder.mkdir();
-        }
         getServer().getPluginManager().registerEvents(new JAMYInteraction(), this);
         getCommand("yamltest").setExecutor(new JAMYCommand());
         ClockMenu.setupClockMenu();
