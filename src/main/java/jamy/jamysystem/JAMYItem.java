@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JAMYItem {
 
@@ -28,12 +29,11 @@ public class JAMYItem {
         return item;
     }
 
-    public static ItemStack getItem(Material material, String name, ArrayList<String> lore) {
-        ArrayList<String> array = new ArrayList<String>(lore);
+    public static ItemStack getItem(Material material, String name, List<String> lore) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
-        meta.setLore(array);
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }

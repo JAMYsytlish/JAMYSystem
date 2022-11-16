@@ -18,6 +18,7 @@ public final class JAMYSystem extends JavaPlugin {
         DataFolder = getDataFolder();
         getServer().getPluginManager().registerEvents(new JAMYInteraction(), this);
         getCommand("yamltest").setExecutor(new JAMYCommand());
+        getCommand("JAMYShop").setExecutor(new JAMYCommand());
         ClockMenu.setupClockMenu();
         System.out.println(ChatColor.BLUE+"Welcome To JAMYSystem!!");
 

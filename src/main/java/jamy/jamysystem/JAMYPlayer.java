@@ -1,6 +1,9 @@
 package jamy.jamysystem;
 
+import jamy.jamysystem.shop.JAMYShop;
+import jamy.jamysystem.shop.ShopItemE;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class JAMYPlayer {
 
@@ -23,8 +26,22 @@ public class JAMYPlayer {
         }
 
     }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
     // (JAMYPlayer).buy(shop, 3) : JAMYPlayer buys 3 index of products in 'shop'
     public void buy(JAMYShop shop, int index) {
+        if(this.hasSpace((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE))) {
+            this.player.getInventory().addItem((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE));
+        }
+    }
+
+
+    public boolean hasSpace(ItemStack itemStack) {
+//        this.player.
+        return true;
 
     }
 

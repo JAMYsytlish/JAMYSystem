@@ -1,9 +1,9 @@
 package jamy.jamysystem;
 
-import org.bukkit.Bukkit;
+import jamy.jamysystem.yaml.YamlControl;
 import org.bukkit.entity.Player;
 
-import static jamy.jamysystem.YamlEnum.Money;
+import static jamy.jamysystem.yaml.YamlEnum.Money;
 
 public class JAMYMoney {
 
