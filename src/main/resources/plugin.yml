@@ -9,4 +9,3 @@ commands:
     description: JAMYShop
     aliases: shop
     usage: /shop open [<String>] // 상점을 엽니다
-    /shop delete [<String>] // 상점을 삭제합니다

@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,13 +52,30 @@ public class JAMYInteraction implements Listener {
 
                         }
                     }
+                } else {
+                    if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
 
             }
         }
     }
     @EventHandler
-    public void onRightClickcOnClock(PlayerInteractEvent event) {
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if(event.getView().getTitle().contains("[JAMYShop] ")) {
+            for (Integer slot : event.getRawSlots()) {
+                if (slot < 54) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
+        }
+    }
+    @EventHandler
+    public void onRightClickOnClock(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if(Objects.equals(Objects.requireNonNull(event.getItem()).getType(), Material.CLOCK)) {
                 event.getPlayer().openInventory(ClockMenu.getInventory());

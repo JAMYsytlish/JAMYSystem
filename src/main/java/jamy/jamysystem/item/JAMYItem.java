@@ -1,4 +1,4 @@
-package jamy.jamysystem;
+package jamy.jamysystem.item;
 
 
 import org.bukkit.Material;

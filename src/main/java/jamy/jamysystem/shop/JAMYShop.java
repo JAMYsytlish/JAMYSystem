@@ -1,14 +1,14 @@
 package jamy.jamysystem.shop;
 
 import jamy.jamysystem.JAMYInventory;
-import jamy.jamysystem.JAMYItem;
+import jamy.jamysystem.item.JAMYItem;
+import jamy.jamysystem.item.StainedColorPane;
 import jamy.jamysystem.yaml.YamlControl;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -75,9 +75,9 @@ public class JAMYShop {
          */
 
     public void setDefaultFrame() {
-//        for (int i = 36; i < 45; i++) {
-//            this.getInventory().setItem(i, getColorPane("§f", 1, colorCode));
-//        }
+        for (int i = 36; i < 45; i++) {
+            this.getInventory().setItem(i, JAMYItem.getItem(StainedColorPane.getColorPane(2),"§f"));
+        }
         List<String> lore = Arrays.asList("§f좌클릭으로 구매", "§f상점 인벤토리로 아이템을 보내 판매");
         ItemStack item = JAMYItem.getItem(Material.OAK_SIGN,"§e도움말",lore);
         this.getInventory().setItem(45, item);

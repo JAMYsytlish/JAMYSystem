@@ -1,12 +1,13 @@
 package jamy.jamysystem;
 
+import jamy.jamysystem.item.JAMYItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
 
-public class JAMYInventory {
+public class JAMYInventory implements Cloneable {
 
     private final Inventory inventory;
 
@@ -24,7 +25,20 @@ public class JAMYInventory {
         this.inventory = Bukkit.createInventory(null, raw*9, title);
     }
 
+
+//    public void setMoneyFrame(JAMYInventory inv, Player toWhom) {
+//        Inventory gui = Bukkit.createInventory(null, 36, "§c테스트");
+//        IInventory inventory = ((CraftInventoryCustom) gui).getInventory();
+//        try {
+//            Field field = inventory.getClass().getDeclaredField("title");
+//            field.setAccessible(true);
+//            String title = (String) field.get(inventory);
+//            Bukkit.broadcastMessage("gui 타이틀: " + title);
+//        } catch (NoSuchFieldException | IllegalAccessException ignored) {}
+//    }
+
     public Inventory getInventory() {
         return this.inventory;
     }
+
 }
