@@ -12,7 +12,6 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
@@ -53,7 +52,7 @@ public class JAMYInteraction implements Listener {
                         }
                     }
                 } else {
-                    if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                    if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) { // shift 클릭으로 상점 인벤토리로 아이템을 옮길 때
                         event.setCancelled(true);
                         return;
                     }
