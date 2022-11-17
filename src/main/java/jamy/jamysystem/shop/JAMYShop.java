@@ -136,7 +136,14 @@ public class JAMYShop {
 
     }
 
+    public static void setMoneyFrame(JAMYShop shop, Player toWhom) {
+        Inventory inventory = shop.getInventory();
+        Inventory tempInv = Bukkit.createInventory(null, inventory.getSize()*9,inventory.get
+    }
+
     public void openTo(Player toWhom) {
+        // 돈 칸 세팅
+
         toWhom.openInventory(this.getInventory());
     }
 
