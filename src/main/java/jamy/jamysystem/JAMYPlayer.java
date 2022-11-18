@@ -49,7 +49,9 @@ public class JAMYPlayer {
 
 
     public boolean hasSpace(ItemStack itemStack) {
-        final Map<Integer, ItemStack> map = this.player.getInventory().addItem(itemStack); // Attempt to add in inventory    
+        Inventory tempInv = Bukkit.createInventory(null, this.player.getInventory().getSize()*9, "temp");
+        tempInv.setContents(this.player.getInventory().getContents());
+        final Map<Integer, ItemStack> map = tempInv.addItem(itemStack); // Attempt to add in inventory    
         return map.isEmpty();
     }
 
