@@ -41,4 +41,6 @@ public class JAMYInventory implements Cloneable {
         return this.inventory;
     }
 
+    
+
 }

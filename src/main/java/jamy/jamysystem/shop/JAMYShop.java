@@ -18,15 +18,14 @@ import static jamy.jamysystem.yaml.YamlEnum.Shop;
 public class JAMYShop {
 
     private final String name;
-    private final Inventory inventory;
     private final YamlControl yaml;
     private static HashMap<String,JAMYShop> Shop_HashMap = new HashMap<>();
+    private static String shopTag = "[JAMYShop] ";
+
     private JAMYShop(String name) {
         this.name = name;
         this.yaml = new YamlControl(Shop,name);
-        this.inventory = new JAMYInventory("[JAMYShop] " + this.name,6).getInventory();
         Shop_HashMap.put(name,this);
-        this.loadInventory();
         this.setTypeToDefault();
     }
     public static JAMYShop getShop(String name) {
@@ -40,11 +39,7 @@ public class JAMYShop {
         return this.name;
     }
 
-    public Inventory getInventory() {
-        return this.inventory;
-    }
-
-    private void setTypeToDefault() {
+    private void setTypeToDefault() { // setType() 으로 바꿔보기
         this.yaml.get().set("SHOP.TYPE.BUY", true);
         this.yaml.get().set("SHOP.TYPE.BUYSHOW", true);
         this.yaml.get().set("SHOP.TYPE.SELL", true);
@@ -56,7 +51,14 @@ public class JAMYShop {
         this.yaml.save();
     }
 
-    private void loadInventory() {
+    private static void loadInventory(Inventory inventory, Player toWhom) {
+        setShopContents(inventory);
+        setDefaultFrame(inventory);
+        setMoneyFrame(inventory, toWhom);
+    }
+    
+    private static void setShopContents(Inventory inventory) {
+
         ItemStack[] items = new ItemStack[36];
         for (int i = 0; i <= 35; i++) {
             items[i] = (ItemStack) yaml.get().get("SHOP.ITEM." + i + ".ITEMVALUE");
@@ -64,8 +66,9 @@ public class JAMYShop {
                 items[i] = new ItemStack(Material.AIR);
             }
         }
-        this.getInventory().setContents(items);
-        this.setDefaultFrame();
+        inventory.setContents(items);
+        
+
     }
     /*
         0 White,      1 Orange,  2 Magenta, 3 Light Blue
@@ -74,16 +77,21 @@ public class JAMYShop {
         12 Brown,    13 Green,  14 Red,    15 Black
          */
 
-    public void setDefaultFrame() {
+    public void setDefaultFrame(Inventory inventory) {
         for (int i = 36; i < 45; i++) {
-            this.getInventory().setItem(i, JAMYItem.getItem(StainedColorPane.getColorPane(2),"§f"));
+            inventory.setItem(i, JAMYItem.getItem(StainedColorPane.getColorPane(2),"§f"));
         }
         List<String> lore = Arrays.asList("§f좌클릭으로 구매", "§f상점 인벤토리로 아이템을 보내 판매");
         ItemStack item = JAMYItem.getItem(Material.OAK_SIGN,"§e도움말",lore);
-        this.getInventory().setItem(45, item);
+        inventory.setItem(45, item);
         item = JAMYItem.getItem(Material.ITEM_FRAME,"§e-1- 페이지");
-        this.getInventory().setItem(49, item);
+        inventory.setItem(49, item);
     }
+
+    private void setMoneyFrame(Inventory inventory, Player toWhom) {
+        inventory.setItem(53, JAMYItem.getItem(MAterial.PAPER,"보유 돈 : " + JAMYMoney.getMoney(toWhom)));
+    }
+
     /*
       @param key
           stock -> int || boolean
@@ -109,7 +117,7 @@ public class JAMYShop {
         return obj;
     }
 
-    public void setItemInfo(int index, ShopItemE key, Object value) {
+    public JAMYShop setItemInfo(int index, ShopItemE key, Object value) {
         this.yaml.get().set("SHOP.ITEM." + index + "." + key, value);
         this.yaml.save();
     }
@@ -136,15 +144,38 @@ public class JAMYShop {
 
     }
 
-    public static void setMoneyFrame(JAMYShop shop, Player toWhom) {
-        Inventory inventory = shop.getInventory();
-        Inventory tempInv = Bukkit.createInventory(null, inventory.getSize()*9,inventory.get
-    }
 
     public void openTo(Player toWhom) {
         // 돈 칸 세팅
-
-        toWhom.openInventory(this.getInventory());
+        Inventory inventory = Bukkit.createInventory(null, inventory.getSize()*9,shopTag + this.name);
+        loadInventory(inventory, toWhom);
+        toWhom.openInventory(inventory);
+    }
+    //?? 이렇게 하는게 맞어?
+    private int getItemAmount() {
+        return this.yaml.get().get("SHOP.ITEM").length;
+    }
+    public void registerItem(ItemStack item, int price, boolean stock, int howMany, boolean pricevar, int smpv, int bgpv, boolean avail) {
+        int index = this.getItemAmount() + 1; 
+        this
+        .setItemInfo(index, VALUE, item)
+        .setItemInfo(index, PRICE, price)
+        .setItemInfo(index, STOCK, stock)
+        .setItemInfo(index, AVAIL, avail);
+        if(stock == true) {
+            // this.setItemInfo(index, )
+        }
     }
 
+    public void registerItem(ItemStack item, int price, boolean avail) {
+        registerItem(item, price, false, null, false, null, null, avail);
+    }
+    
+    public void registerItem(ItemStack item, int price, boolean stock int howMany, boolean avail) {
+        registerItem(item, price, stock, howMany, false, null, null, avail);
+    }
+    
+    public void registerItem(ItemStack item, int price, boolean pricevar, int smpv, int bgpv, boolean avail) {
+        registerItem(item, price, false, null, pricevar, smpv, bgpv,avail );
+    }
 }

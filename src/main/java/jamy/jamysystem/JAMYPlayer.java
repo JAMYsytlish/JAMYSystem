@@ -33,16 +33,24 @@ public class JAMYPlayer {
 
     // (JAMYPlayer).buy(shop, 3) : JAMYPlayer buys 3 index of products in 'shop'
     public void buy(JAMYShop shop, int index) {
-        if(this.hasSpace((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE))) {
-            this.player.getInventory().addItem((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE));
+        if (JAMYMoney.getMoney(this.player) < (int) shop.getItemInfo(index,PRICE)) {
+            player.sendMessage("You don't have enough money");
+        } else {
+            if (!this.hasSpace((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE))) {
+                this.player.sendMessage("Your Inventory doesn't have space");
+            } else {
+                if (shop.getItemInfo(index, AVAIl) == true) { 
+                   this.player.getInventory().addItem((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE));
+                }
+            }   
         }
+ 
     }
 
 
     public boolean hasSpace(ItemStack itemStack) {
-//        this.player.
-        return true;
-
+        final Map<Integer, ItemStack> map = this.player.getInventory().addItem(itemStack); // Attempt to add in inventory    
+        return map.isEmpty();
     }
 
 }
