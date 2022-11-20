@@ -3,8 +3,8 @@ version: '${project.version}'
 main: jamy.jamysystem.JAMYSystem
 api-version: 1.19
 commands:
-  yamltest:
-    description: yamltest
+  test:
+    description: test
   JAMYShop:
     description: JAMYShop
     aliases: shop

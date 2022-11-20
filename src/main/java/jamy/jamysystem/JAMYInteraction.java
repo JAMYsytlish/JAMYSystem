@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -34,25 +35,26 @@ public class JAMYInteraction implements Listener {
                 JAMYMoney.addMoney(player.getPlayer(), 10000 );
             }
         } else {
-            if (event.getView().getTitle().contains("[JAMYShop] ")) {
+            if (event.getView().getTitle().contains(JAMYShop.shopTag)) {
                 String shopName = event.getView().getTitle().split(" ")[1];
                 JAMYShop shop = JAMYShop.getShop(shopName);
 
                 int slot = event.getRawSlot();
                 if (slot < 54) {
                     event.setCancelled(true);
-                    if(event.getAction() != InventoryAction.PICKUP_ALL) return;
-                    if (slot < 36) { // 상품을 클릭했을 때
-                        if(!shop.getType(ShopE.BUY).equals(false)) {
-                            int price = (int) shop.getItemInfo(slot+1, ShopItemE.PRICE);
-                            if(getMoney(player.getPlayer()) >= price) {
-                                player.buy(shop,slot+1);
-                            }
+                    if(event.getAction() == InventoryAction.PICKUP_ALL) {
 
+                        if (slot < 36) { // 상품을 클릭했을 때
+                            if (!shop.getType(ShopE.BUY).equals(false)) {
+                                player.buy(shop, slot + 1);
+                            }
                         }
+                    } else if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.SWAP_WITH_CURSOR) {
+                        player.getPlayer().sendMessage("Sell attempt!!");
                     }
                 } else {
                     if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) { // shift 클릭으로 상점 인벤토리로 아이템을 옮길 때
+                        player.getPlayer().sendMessage("Sell attempt!!");
                         event.setCancelled(true);
                         return;
                     }
@@ -81,5 +83,13 @@ public class JAMYInteraction implements Listener {
             }
         }
 
+    }
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if(event.getView().getTitle().contains(JAMYShop.shopTag)){
+            String shopName = event.getView().getTitle().split(" ")[1];
+            JAMYShop shop = JAMYShop.getShop(shopName);
+            shop.openList.remove(event.getPlayer());
+        }
     }
 }

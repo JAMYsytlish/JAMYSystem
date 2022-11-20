@@ -12,7 +12,7 @@ import static jamy.jamysystem.JAMYSystem.DataFolder;
 public class YamlControl {
 
     private final File file;
-    private final FileConfiguration customFile;
+    private FileConfiguration customFile;
     private final String name;
 
     public YamlControl(YamlEnum type, String name) {
@@ -37,6 +37,7 @@ public class YamlControl {
         return this.name;
     }
     public FileConfiguration get(){
+        this.reload();
         return customFile;
     }
  
@@ -50,8 +51,8 @@ public class YamlControl {
     public void delete() {
         file.delete();
     }
-//    public void reload(){
-//        customFile = YamlConfiguration.loadConfiguration(file);
-//    }
+    public void reload(){
+        customFile = YamlConfiguration.loadConfiguration(file);
+    }
 
 }

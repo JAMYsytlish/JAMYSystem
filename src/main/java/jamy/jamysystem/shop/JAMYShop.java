@@ -1,18 +1,23 @@
 package jamy.jamysystem.shop;
 
 import jamy.jamysystem.JAMYInventory;
+import jamy.jamysystem.JAMYMoney;
 import jamy.jamysystem.item.JAMYItem;
 import jamy.jamysystem.item.StainedColorPane;
 import jamy.jamysystem.yaml.YamlControl;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static jamy.jamysystem.shop.ShopE.*;
+import static jamy.jamysystem.shop.ShopItemE.*;
 import static jamy.jamysystem.yaml.YamlEnum.Shop;
 
 public class JAMYShop {
@@ -20,8 +25,9 @@ public class JAMYShop {
     private final String name;
     private final YamlControl yaml;
     private static HashMap<String,JAMYShop> Shop_HashMap = new HashMap<>();
-    private static String shopTag = "[JAMYShop] ";
+    public static String shopTag = "[JAMYShop] ";
 
+    public ArrayList<Player> openList = new ArrayList<>();
     private JAMYShop(String name) {
         this.name = name;
         this.yaml = new YamlControl(Shop,name);
@@ -40,28 +46,30 @@ public class JAMYShop {
     }
 
     private void setTypeToDefault() { // setType() 으로 바꿔보기
-        this.yaml.get().set("SHOP.TYPE.BUY", true);
-        this.yaml.get().set("SHOP.TYPE.BUYSHOW", true);
-        this.yaml.get().set("SHOP.TYPE.SELL", true);
-        this.yaml.get().set("SHOP.TYPE.SELLSHOW", true);
-        this.yaml.get().set("SHOP.TYPE.OPENED", 36);
-        this.yaml.get().set("SHOP.TYPE.OWNERSHOW", false);
-        this.yaml.get().set("SHOP.TYPE.SMPVSHOW", false);
-        this.yaml.get().set("SHOP.TYPE.BGPVSHOW", false);
-        this.yaml.save();
+        this
+        .setType(BUY,true)
+        .setType(BUYSHOW,true)
+        .setType(SELL,true)
+        .setType(SELLSHOW,true)
+        .setType(OPENED,36)
+        .setType(OWNERSHOW,false)
+        .setType(SMPVSHOW,false)
+        .setType(BGPVSHOW,false);
     }
 
-    private static void loadInventory(Inventory inventory, Player toWhom) {
-        setShopContents(inventory);
+
+
+    public void loadInventory(Inventory inventory, Player toWhom) {
+        this.setShopContents(inventory);
         setDefaultFrame(inventory);
         setMoneyFrame(inventory, toWhom);
     }
     
-    private static void setShopContents(Inventory inventory) {
+    private void setShopContents(Inventory inventory) {
 
         ItemStack[] items = new ItemStack[36];
         for (int i = 0; i <= 35; i++) {
-            items[i] = (ItemStack) yaml.get().get("SHOP.ITEM." + i + ".ITEMVALUE");
+            items[i] = (ItemStack) this.getItemInfo(i+1,VALUE);
             if (items[i] == null) {
                 items[i] = new ItemStack(Material.AIR);
             }
@@ -77,7 +85,7 @@ public class JAMYShop {
         12 Brown,    13 Green,  14 Red,    15 Black
          */
 
-    public void setDefaultFrame(Inventory inventory) {
+    public static void setDefaultFrame(Inventory inventory) {
         for (int i = 36; i < 45; i++) {
             inventory.setItem(i, JAMYItem.getItem(StainedColorPane.getColorPane(2),"§f"));
         }
@@ -88,8 +96,8 @@ public class JAMYShop {
         inventory.setItem(49, item);
     }
 
-    private void setMoneyFrame(Inventory inventory, Player toWhom) {
-        inventory.setItem(53, JAMYItem.getItem(MAterial.PAPER,"보유 돈 : " + JAMYMoney.getMoney(toWhom)));
+    public static void setMoneyFrame(Inventory inventory, Player toWhom) {
+        inventory.setItem(53, JAMYItem.getItem(Material.PAPER,"보유 돈 : " + JAMYMoney.getMoney(toWhom)));
     }
 
     /*
@@ -109,10 +117,10 @@ public class JAMYShop {
                 obj = this.yaml.get().getInt("SHOP.ITEM." + index + ".PRICE");
                 break;
             case VALUE:
-                obj = this.yaml.get().get("SHOP.ITEM." + index + ".ITEMVALUE");
+                obj = this.yaml.get().getItemStack("SHOP.ITEM." + index + ".VALUE");
                 break;
             case AVAIL:
-                obj = this.yaml.get().get("SHOP.ITEM." + index + ".AVAIL");
+                obj = this.yaml.get().getBoolean("SHOP.ITEM." + index + ".AVAIL");
         }
         return obj;
     }
@@ -120,15 +128,17 @@ public class JAMYShop {
     public JAMYShop setItemInfo(int index, ShopItemE key, Object value) {
         this.yaml.get().set("SHOP.ITEM." + index + "." + key, value);
         this.yaml.save();
+        return this;
     }
 
     public Object getType(ShopE key) {
         return this.yaml.get().get("SHOP.TYPE." + key);
     }
 
-    public void setType(ShopE key, Object value) {
+    public JAMYShop setType(ShopE key, Object value) {
         this.yaml.get().set("SHOP.TYPE." + key, value);
         this.yaml.save();
+        return this;
     }
     public void deleteItem(int index) {
 
@@ -147,35 +157,48 @@ public class JAMYShop {
 
     public void openTo(Player toWhom) {
         // 돈 칸 세팅
-        Inventory inventory = Bukkit.createInventory(null, inventory.getSize()*9,shopTag + this.name);
-        loadInventory(inventory, toWhom);
+        Inventory inventory = Bukkit.createInventory(null, 54,shopTag + this.name);
+        this.loadInventory(inventory, toWhom);
+        openList.add(toWhom);
+
         toWhom.openInventory(inventory);
     }
     //?? 이렇게 하는게 맞어?
-    private int getItemAmount() {
-        return this.yaml.get().get("SHOP.ITEM").length;
+    public int getItemAmount() {
+        int size;
+        try {
+            size = this.yaml.get().getConfigurationSection("SHOP.ITEM").getKeys(false).size();
+//            System.out.println(this.yaml.get().getList("SHOP.ITEM").toString());
+//            System.out.println("1");
+        } catch (NullPointerException e) {
+            size = 0;
+        }
+        return size;
     }
     public void registerItem(ItemStack item, int price, boolean stock, int howMany, boolean pricevar, int smpv, int bgpv, boolean avail) {
         int index = this.getItemAmount() + 1; 
         this
         .setItemInfo(index, VALUE, item)
         .setItemInfo(index, PRICE, price)
-        .setItemInfo(index, STOCK, stock)
-        .setItemInfo(index, AVAIL, avail);
-        if(stock == true) {
-            // this.setItemInfo(index, )
+        .setItemInfo(index, STOCK, stock);
+        if (stock) {
+            setItemInfo(index,STOCK,howMany); // 재고 있으면 숫자로, 없으면 false 로
         }
+
+
+
+
     }
 
     public void registerItem(ItemStack item, int price, boolean avail) {
-        registerItem(item, price, false, null, false, null, null, avail);
+        registerItem(item, price, false, 0, false, 0,0, avail);
     }
-    
-    public void registerItem(ItemStack item, int price, boolean stock int howMany, boolean avail) {
-        registerItem(item, price, stock, howMany, false, null, null, avail);
+
+    public void registerItem(ItemStack item, int price, boolean stock, int howMany, boolean avail) {
+        registerItem(item, price, stock, howMany, false, 0, 0, avail);
     }
     
     public void registerItem(ItemStack item, int price, boolean pricevar, int smpv, int bgpv, boolean avail) {
-        registerItem(item, price, false, null, pricevar, smpv, bgpv,avail );
+        registerItem(item, price, false, 0, pricevar, smpv, bgpv,avail );
     }
 }

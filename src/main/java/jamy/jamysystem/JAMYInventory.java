@@ -4,7 +4,12 @@ import jamy.jamysystem.item.JAMYItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class JAMYInventory implements Cloneable {
@@ -26,16 +31,17 @@ public class JAMYInventory implements Cloneable {
     }
 
 
-//    public void setMoneyFrame(JAMYInventory inv, Player toWhom) {
-//        Inventory gui = Bukkit.createInventory(null, 36, "§c테스트");
-//        IInventory inventory = ((CraftInventoryCustom) gui).getInventory();
-//        try {
-//            Field field = inventory.getClass().getDeclaredField("title");
-//            field.setAccessible(true);
-//            String title = (String) field.get(inventory);
-//            Bukkit.broadcastMessage("gui 타이틀: " + title);
-//        } catch (NoSuchFieldException | IllegalAccessException ignored) {}
-//    }
+    public static void setMoneyFrame1() {
+        Inventory gui = Bukkit.createInventory(null, 36, "§c테스트");
+        try {
+            Method getInventory = gui.getClass().getMethod("getInventory");
+            Object inventory = getInventory.invoke(gui);
+            Field field = inventory.getClass().getDeclaredField("title");
+            field.setAccessible(true);
+            String title = (String) field.get(inventory);
+            Bukkit.broadcastMessage("gui 타이틀: " + title);
+        } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {}
+    }
 
     public Inventory getInventory() {
         return this.inventory;

@@ -2,8 +2,12 @@ package jamy.jamysystem;
 
 import jamy.jamysystem.shop.JAMYShop;
 import jamy.jamysystem.shop.ShopItemE;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import static jamy.jamysystem.shop.ShopE.BUY;
+import static jamy.jamysystem.shop.ShopItemE.PRICE;
 
 public class JAMYPlayer {
 
@@ -15,8 +19,7 @@ public class JAMYPlayer {
 
     public void sendMoney(Player receiver, Integer amount) {
 
-        Integer MoneyGiver = JAMYMoney.getMoney(this.player);
-        Integer MoneyReceiver = JAMYMoney.getMoney(receiver);
+        int MoneyGiver = JAMYMoney.getMoney(this.player);
 
         if (MoneyGiver < amount) {
             this.player.sendMessage("Not enough money.");
@@ -34,13 +37,16 @@ public class JAMYPlayer {
     // (JAMYPlayer).buy(shop, 3) : JAMYPlayer buys 3 index of products in 'shop'
     public void buy(JAMYShop shop, int index) {
         if (JAMYMoney.getMoney(this.player) < (int) shop.getItemInfo(index,PRICE)) {
-            player.sendMessage("You don't have enough money");
+            this.player.sendMessage("You don't have enough money");
         } else {
             if (!this.hasSpace((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE))) {
                 this.player.sendMessage("Your Inventory doesn't have space");
             } else {
-                if (shop.getItemInfo(index, AVAIl) == true) { 
-                   this.player.getInventory().addItem((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE));
+                if ((boolean) shop.getType(BUY)) {
+                    this.player.getInventory().addItem((ItemStack) shop.getItemInfo(index, ShopItemE.VALUE));
+                    JAMYMoney.subMoney(this.player,(int) shop.getItemInfo(index,PRICE));
+                    shop.loadInventory(this.player.getOpenInventory().getTopInventory(),this.player);
+
                 }
             }   
         }
@@ -48,11 +54,24 @@ public class JAMYPlayer {
     }
 
 
-    public boolean hasSpace(ItemStack itemStack) {
-        Inventory tempInv = Bukkit.createInventory(null, this.player.getInventory().getSize()*9, "temp");
-        tempInv.setContents(this.player.getInventory().getContents());
-        final Map<Integer, ItemStack> map = tempInv.addItem(itemStack); // Attempt to add in inventory    
-        return map.isEmpty();
+    public boolean hasSpace(ItemStack item) {
+        final ItemStack[] contents = this.player.getInventory().getContents();
+        int amount = item.getAmount();
+        for (final ItemStack stack : contents) {
+            if (stack == null || stack.getType() == Material.AIR) {
+                if (amount <= 64) {
+                    amount = 0;
+                    break;
+                } else amount -= 64;
+            } else {
+                if (!stack.isSimilar(item)) continue;
+                final int diff = 64 - stack.getAmount();
+                if (diff >= amount) {
+                    amount = 0;
+                    break;
+                } else amount -= diff;
+            }
+        }
+        return amount <= 0;
     }
-
 }
