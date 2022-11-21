@@ -90,6 +90,7 @@ public class JAMYInteraction implements Listener {
             String shopName = event.getView().getTitle().split(" ")[1];
             JAMYShop shop = JAMYShop.getShop(shopName);
             shop.openList.remove(event.getPlayer());
+            event.getPlayer().sendMessage("You have closed the shop of " + shopName);
         }
     }
 }

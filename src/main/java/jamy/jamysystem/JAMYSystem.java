@@ -10,7 +10,7 @@ import static jamy.jamysystem.JAMYInventory.ClockMenu;
 
 
 public final class JAMYSystem extends JavaPlugin {
-
+// font : Office Code Pro  , Theme : Catppuccin frappe
     public static File DataFolder;
     @Override
     public void onEnable() {

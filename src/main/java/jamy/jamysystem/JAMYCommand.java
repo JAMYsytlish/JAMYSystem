@@ -54,14 +54,15 @@ public class JAMYCommand implements CommandExecutor {
                     }
                     ItemStack register = (player.getInventory().getItemInMainHand());
                     register = getRegister(register, name, price, stock);
-                    player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                    player.getInventory().addItem(register);
+                    player.getInventory().setItemInMainHand(register);
+//                    player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+//                    player.getInventory().addItem(register);
                     break;
                 case "register":  //JAMYShop 0.JaemY_Nane 1.register 2.<price> 3.<stock:boolean> 4.<howMany:int>=0>
                     if(args.length < 4) return false;
                     ItemStack itemStack = player.getInventory().getItemInMainHand();
                     boolean stockCheck = false;
-                    int howMany = 1;
+                    int howMany = 0;
                     if (!isInt(args[2])) { return false; }
                     if (getBoolean(args[3]) == null) {
                         return false;
@@ -70,7 +71,6 @@ public class JAMYCommand implements CommandExecutor {
                             return false;
                         }
                         howMany = Integer.parseInt(args[4]);
-                        return false;
                     }
 
                     price = Integer.parseInt(args[2]);

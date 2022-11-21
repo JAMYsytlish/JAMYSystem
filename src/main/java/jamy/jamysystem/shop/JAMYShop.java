@@ -1,6 +1,5 @@
 package jamy.jamysystem.shop;
 
-import jamy.jamysystem.JAMYInventory;
 import jamy.jamysystem.JAMYMoney;
 import jamy.jamysystem.item.JAMYItem;
 import jamy.jamysystem.item.StainedColorPane;
@@ -11,10 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static jamy.jamysystem.shop.ShopE.*;
 import static jamy.jamysystem.shop.ShopItemE.*;
@@ -24,8 +20,11 @@ public class JAMYShop {
 
     private final String name;
     private final YamlControl yaml;
-    private static HashMap<String,JAMYShop> Shop_HashMap = new HashMap<>();
+    private static final HashMap<String,JAMYShop> Shop_HashMap = new HashMap<>();
     public static String shopTag = "[JAMYShop] ";
+
+    // yaml 저장을 위한 List
+
 
     public ArrayList<Player> openList = new ArrayList<>();
     private JAMYShop(String name) {
@@ -141,13 +140,35 @@ public class JAMYShop {
         return this;
     }
     public void deleteItem(int index) {
+        LinkedList<ItemStack> Shop_Item  = new LinkedList<>();
+        LinkedList<Integer> Shop_Price = new LinkedList<>();
+        LinkedList<Object> Shop_Stock = new LinkedList<>();
+
+        for (String ind : this.yaml.get().getConfigurationSection("SHOP.ITEM").getKeys(false)) {
+            Shop_Item.add((ItemStack) this.getItemInfo(Integer.parseInt(ind),VALUE));
+            Shop_Price.add((Integer) this.getItemInfo(Integer.parseInt(ind),PRICE));
+            Shop_Stock.add(this.getItemInfo(Integer.parseInt(ind),STOCK));
+        }
+        this.yaml.get().set("SHOP.ITEM", null);
+
+        Shop_Item.remove(index-1);
+        Shop_Price.remove(index-1);
+        Shop_Stock.remove(index-1);
+
+        listToYaml(Shop_Item,VALUE);
+        listToYaml(Shop_Price,PRICE);
+        listToYaml(Shop_Stock,STOCK);
 
         // TODO
         // delete item
         // yaml re-setting
 
     }
-
+    public void listToYaml(LinkedList<?> list, ShopItemE key) {
+        for(int i = 0; i < list.size(); i++) {
+            this.setItemInfo(i+1,key, list.get(i));
+        }
+    }
     public void deleteShop() {
         Shop_HashMap.remove(this.getName());
         this.yaml.delete();
@@ -181,6 +202,11 @@ public class JAMYShop {
         .setItemInfo(index, VALUE, item)
         .setItemInfo(index, PRICE, price)
         .setItemInfo(index, STOCK, stock);
+
+//        Shop_Item.add(item);
+//        Shop_Price.add(price);
+//        Shop_Stock.add(stock);
+
         if (stock) {
             setItemInfo(index,STOCK,howMany); // 재고 있으면 숫자로, 없으면 false 로
         }
@@ -201,4 +227,7 @@ public class JAMYShop {
     public void registerItem(ItemStack item, int price, boolean pricevar, int smpv, int bgpv, boolean avail) {
         registerItem(item, price, false, 0, pricevar, smpv, bgpv,avail );
     }
+
+
+
 }
