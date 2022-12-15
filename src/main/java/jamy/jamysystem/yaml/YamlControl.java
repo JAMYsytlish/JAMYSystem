@@ -12,12 +12,12 @@ import static jamy.jamysystem.JAMYSystem.DataFolder;
 public class YamlControl {
 
     private final File file;
-    private FileConfiguration customFile;
     private final String name;
+    private FileConfiguration customFile;
 
     public YamlControl(YamlEnum type, String name) {
         this.name = name;
-        this.file = new File(DataFolder, type.getPath() + name +".yaml");
+        this.file = new File(DataFolder, type.getPath() + name + ".yaml");
 //        System.out.println("exists? : " + file.exists());
 //        System.out.println(file.getPath());
 
@@ -32,15 +32,14 @@ public class YamlControl {
     }
 
 
-
-    public String getName() {
-        return this.name;
-    }
-    public FileConfiguration get(){
+    //    public String getName() {
+//        return this.name;
+//    }
+    public FileConfiguration get() {
         this.reload();
         return customFile;
     }
- 
+
     public void save() {
         try {
             customFile.save(file);
@@ -48,10 +47,12 @@ public class YamlControl {
             System.out.println("Couldn't save file");
         }
     }
+
     public void delete() {
         file.delete();
     }
-    public void reload(){
+
+    public void reload() {
         customFile = YamlConfiguration.loadConfiguration(file);
     }
 

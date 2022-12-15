@@ -8,4 +8,8 @@ commands:
   JAMYShop:
     description: JAMYShop
     aliases: shop
-    usage: /shop open [<String>] // 상점을 엽니다
+    usage: |
+      /shop <name>
+          open // 상점을 엽니다 
+          register <price:int> <stock:boolean> <howMany:int::default=0>
+          getregister <price:int> 

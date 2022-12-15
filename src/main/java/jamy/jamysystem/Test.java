@@ -17,12 +17,12 @@ public class Test implements CommandExecutor {
         setMoneyFrame1();
 
         YamlControl yaml = new YamlControl(YamlEnum.Money, "TEST");
-        yaml.get().set("TEST.KEY.1","hello");
-        yaml.get().set("TEST.KEY.2","world!");
+        yaml.get().set("TEST.KEY.1", "hello");
+        yaml.get().set("TEST.KEY.2", "world!");
         List<Integer> list = new ArrayList<>();
-        list.add(0,3);
-        list.add(1,4);
-        yaml.get().set("TEST.LIST",list);
+        list.add(0, 3);
+        list.add(1, 4);
+        yaml.get().set("TEST.LIST", list);
         yaml.save();
 
         List<?> object = yaml.get().getMapList("TEST.KEY");

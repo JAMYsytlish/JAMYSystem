@@ -1,8 +1,10 @@
 package jamy.jamysystem.shop;
 
 public enum ShopItemE {
-    STOCK,
+    STOCKS,
     PRICE,
     VALUE,
-    AVAIL,
+    SELLAVAIL,
+    BUYAVAIL,
+    OWNER
 }
