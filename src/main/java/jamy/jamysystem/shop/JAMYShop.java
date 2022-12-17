@@ -100,12 +100,6 @@ public class JAMYShop {
                 .setType(SMPVSHOW, false)
                 .setType(BGPVSHOW, false);
     }
-    /*
-        0 White,      1 Orange,  2 Magenta, 3 Light Blue
-        4 Yellow,     5 Lime,    6 Pink,    7 Gray
-        8 Light Gray, 9 Cyan,   10 Purple, 11 Blue
-        12 Brown,    13 Green,  14 Red,    15 Black
-         */
 
     public void loadInventory(Inventory inventory, Player toWhom) {
         this.setShopContents(inventory);

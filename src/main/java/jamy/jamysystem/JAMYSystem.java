@@ -1,7 +1,6 @@
 package jamy.jamysystem;
 
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -10,8 +9,9 @@ import static jamy.jamysystem.JAMYInventory.ClockMenu;
 
 
 public final class JAMYSystem extends JavaPlugin {
-// font : Office Code Pro  , Theme : Catppuccin frappe
+    // font : Office Code Pro  , Theme : Catppuccin frappe
     public static File DataFolder;
+
     @Override
     public void onEnable() {
         // Plugin startup
@@ -20,7 +20,8 @@ public final class JAMYSystem extends JavaPlugin {
         getCommand("test").setExecutor(new Test());
         getCommand("JAMYShop").setExecutor(new JAMYCommand());
         ClockMenu.setupClockMenu();
-        System.out.println(ChatColor.BLUE+"Welcome To JAMYSystem!!");
+        JAMYCommander.commanderInit();
+        System.out.println(ChatColor.BLUE + "Welcome To JAMYSystem!!");
 
     }
 
