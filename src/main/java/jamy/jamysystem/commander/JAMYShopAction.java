@@ -37,7 +37,7 @@ public class JAMYShopAction implements Listener {
         player.openInventory(shopAction);
     }
 
-    public static void shopActionInventoryInit() {
+    public static void init() {
         ItemStack[] items = new ItemStack[27];
         items[10] = GET_REGISTER;
         items[11] = REGISTER_PRODUCT;

@@ -47,10 +47,12 @@ public class JAMYInteraction implements Listener {
             event.setCancelled(true);
             if (event.getAction() != InventoryAction.PICKUP_ALL) return;
 
+            final int MONEY_SLOT = 13;
+            final int ADD_MONEY_SLOT = 15;
 
-            if (event.getRawSlot() == 13) {
+            if (event.getRawSlot() == MONEY_SLOT) {
                 player.getPlayer().sendMessage("Your Money : " + NumberFormat.getInstance().format(getMoney(player.getPlayer())));
-            } else if (event.getRawSlot() == 15) {
+            } else if (event.getRawSlot() == ADD_MONEY_SLOT) {
                 JAMYMoney.addMoney(player.getPlayer(), 10000);
             }
         } else {

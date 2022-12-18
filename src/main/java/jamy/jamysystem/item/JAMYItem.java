@@ -76,7 +76,6 @@ public class JAMYItem extends ItemStack {
     public static ItemStack getRegister(ItemStack itemStack, int price) {
         Material type = itemStack.getType();
         int amount = itemStack.getAmount();
-
         ItemStack item = new ItemStack(type);
         ItemMeta meta = item.getItemMeta();
         List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();

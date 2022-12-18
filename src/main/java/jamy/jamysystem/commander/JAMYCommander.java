@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class JAMYCommander implements Listener {
 
-    private static final Inventory commander = Bukkit.createInventory(null, 3, "[JAMYCommander]");
+    private static final Inventory commander = Bukkit.createInventory(null, 27, "[JAMYCommander]");
     private static final ItemStack SHOP_LIST = new ItemBuilder(Material.PAPER)
             .displayName("§e상점 목록")
             .lore("§f상점 목록을 볼 수 있습니다")
@@ -29,7 +29,7 @@ public class JAMYCommander implements Listener {
             .emptyLore()
             .build();
 
-    public static void commanderInit() {
+    public static void init() {
         ItemStack[] items = new ItemStack[27];
         items[10] = SHOP_LIST;
         items[11] = SHOP_ACTION;
